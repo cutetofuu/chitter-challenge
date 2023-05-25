@@ -1,6 +1,8 @@
+import os
+from flask import g
 import psycopg
 from psycopg.rows import dict_row
-import os
+
 
 # This class helps us interact with the database.
 # It wraps the underlying psycopg library that we are using.
@@ -8,18 +10,23 @@ import os
 # If the below seems too complex right now, that's OK.
 # That's why we have provided it!
 class DatabaseConnection:
-    DATABASE_NAME = "chitter" #
+    # VVV CHANGE BOTH OF THESE VVV
+    DEV_DATABASE_NAME = "chitter"
+    TEST_DATABASE_NAME = "chitter_test"
+
+    def __init__(self, test_mode=False):
+        self.test_mode = test_mode
 
     # This method connects to PostgreSQL using the psycopg library. We connect
     # to localhost and select the database name given in argument.
     def connect(self):
         try:
             self.connection = psycopg.connect(
-                f"postgresql://localhost/{self.DATABASE_NAME}",
+                f"postgresql://localhost/{self._database_name()}",
                 row_factory=dict_row)
         except psycopg.OperationalError:
-            raise Exception(f"Couldn't connect to the database {self.DATABASE_NAME}! " \
-                    f"Did you create it using `createdb {self.DATABASE_NAME}`?")
+            raise Exception(f"Couldn't connect to the database {self._database_name()}! " \
+                    f"Did you create it using `createdb {self._database_name()}`?")
 
     # This method seeds the database with the given SQL file.
     # We use it to set up our database ready for our tests or application.
@@ -54,3 +61,19 @@ class DatabaseConnection:
     def _check_connection(self):
         if self.connection is None:
             raise Exception(self.CONNECTION_MESSAGE)
+
+    # This private method returns the name of the database we should use.
+    def _database_name(self):
+        if self.test_mode:
+            return self.TEST_DATABASE_NAME
+        else:
+            return self.DEV_DATABASE_NAME
+
+# This function integrates with Flask to create one database connection that
+# Flask request can use. To see how to use it, look at example_routes.py
+def get_flask_database_connection(app):
+    if not hasattr(g, 'flask_database_connection'):
+        g.flask_database_connection = DatabaseConnection(
+            test_mode=os.getenv('APP_ENV') == 'test')
+        g.flask_database_connection.connect()
+    return g.flask_database_connection
