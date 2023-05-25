@@ -49,7 +49,7 @@ def test_update(db_connection):
         User(1, 'david@test.com', 'password111', 'David', 'happy_face'),
         User(2, 'jane@test.com', 'password222', 'Jane', 'jane_test'),
         User(3, 'pickle@test.com', 'password333', 'Pickle', 'pickle_test'),
-        User(4, 'john@test.com', 'password444', 'John', 'john_test'),
+        User(4, 'john@test.com', 'password444', 'John', 'john_test')
     ]
 
 def test_delete(db_connection):

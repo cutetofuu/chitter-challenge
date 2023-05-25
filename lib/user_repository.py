@@ -17,10 +17,10 @@ class UserRepository:
         return User(rows[0]['id'], rows[0]['email'], rows[0]['password'], rows[0]['name'], rows[0]['username'])
     
     def create(self, user):
-        self._connection.execute('INSERT INTO users (email, password, name, username) VALUES (%s, %s, %s, %s)', [user.email, user.password, user.name, user.username])
+        self._connection.execute('INSERT INTO users (email, password, name, username) VALUES (%s, %s, %s, %s)', [user._email, user._password, user.name, user.username])
 
     def update(self, user):
-        self._connection.execute('UPDATE users SET email = %s, password = %s, name = %s, username = %s WHERE id = %s', [user.email, user.password, user.name, user.username, user.id])
+        self._connection.execute('UPDATE users SET email = %s, password = %s, name = %s, username = %s WHERE id = %s', [user._email, user._password, user.name, user.username, user.id])
 
     def delete(self, id):
         self._connection.execute('DELETE FROM users WHERE id = %s', [id])
