@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Chitter</title>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <h1>Chitter</h1>
+        <h2>Create new account</h2>
+        <form action="/signup" method="POST">
+            {% if errors %}
+                <p class="t-errors">
+                    There were errors with your submission: {{ errors }}
+                </p>
+            {% endif %}
+
+            <p>
+                <label for="email">Email: </label>
+                <input type="text" name="email" id="email">
+            </p>
+            <p>
+                <label for="password">Password: </label>
+                <input type="text" name="password" id="password">
+            </p>
+            <p>
+                <label for="name">Name: </label>
+                <input type="text" name="name" id="name">
+            </p>
+            <p>
+                <label for="username">Username: </label>
+                <input type="text" name="username" id="username">
+            </p>
+            <p>
+                <input type="submit" value="Create New Account">
+            </p>
+        </form>
+    </body>
+</html>

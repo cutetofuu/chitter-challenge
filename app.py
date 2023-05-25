@@ -1,37 +1,70 @@
-from lib.database_connection import DatabaseConnection
-from lib.artist_repository import ArtistRepository
-from lib.album_repository import AlbumRepository
+import os
+from flask import Flask, request, render_template, redirect
+from lib.database_connection import get_flask_database_connection
+from lib.peep_repository import PeepRepository
+from lib.peep import Peep
+from lib.user_repository import UserRepository
+from lib.user import User
+from datetime import datetime
 
-class Application():
-    def __init__(self):
-        self._connection = DatabaseConnection()
-        self._connection.connect()
-        self._connection.seed("seeds/music_library.sql")
+# Create a new Flask app
+app = Flask(__name__)
 
-    def run(self):
-        print("Welcome to the music library manager! \n")
-        print("What would you like to do? \n 1 - List all albums \n 2 - List all artists \n")
+# PEEPS ROUTES
 
-        user_input = input("Enter your choice: ")
+@app.route("/home", methods=["GET"])
+def get_all_peeps():
+    connection = get_flask_database_connection(app)
+    peep_repo = PeepRepository(connection)
+    peeps = peep_repo.all_with_usernames()
+    return render_template("peeps/index.html", peeps=peeps)
 
-        if user_input == "1":
-            album_repository = AlbumRepository(self._connection)
-            albums = album_repository.all()
+@app.route("/home", methods=["POST"])
+def create_new_peep():
+    connection = get_flask_database_connection(app)
+    peep_repo = PeepRepository(connection)
+    
+    message = request.form["message"]
+    created_at = datetime.now()
+    user_id = 3
 
-            print("\nHere is the list of albums:")
-            for album in albums:
-                print(f"* {album.id} - {album.title}")
-        elif user_input == "2":
-            artist_repository = ArtistRepository(self._connection)
-            artists = artist_repository.all()
+    peep = Peep(None, message, created_at, user_id)
 
-            print("\nHere is the list of artists:")
-            for artist in artists:
-                print(f"* {artist.id} - {artist.name} ({artist.genre})")
-        else:
-            print("Invalid input.")
-            
+    peep_repo.create(peep)
 
+    return redirect("/home")
+
+# USERS ROUTES
+
+@app.route("/signup", methods=["GET"])
+def get_new_user():
+    return render_template("users/signup.html")
+
+@app.route("/signup", methods=["POST"])
+def create_new_user():
+    connection = get_flask_database_connection(app)
+    user_repo = UserRepository(connection)
+
+    email = request.form["email"]
+    password = request.form["password"]
+    name = request.form["name"]
+    username = request.form["username"]
+
+    user = User(None, email, password, name, username)
+
+    if not user.is_valid():
+        return render_template('/users/signup.html', user=user, errors=user.generate_errors()), 400
+
+    user_repo.create(user)
+
+    return redirect("/signup-success")
+
+@app.route("/signup-success", methods=["GET"])
+def get_new_user_confirmation():
+    return render_template("users/signup_success.html")
+
+# These lines start the server if you run this file directly
+# They also start the server configured to use the test database
+# if started in test mode.
 if __name__ == '__main__':
-    app = Application()
-    app.run()
+    app.run(debug=True, port=int(os.environ.get('PORT', 5000)))

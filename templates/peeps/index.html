@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Chitter</title>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <h1>Chitter</h1>
+        <h2>Home</h2>
+        <h3>Post a New Peep</h3>
+        <form action="/home" method="POST">
+            <textarea name="message" placeholder="What is happening?!"></textarea>
+            <p>
+                <input type="submit" value="Peep">
+            </p>
+        </form>
+        
+        <h3>Peeps</h3>
+        <ul>
+            {% for peep in peeps %}
+                <li>
+                    <strong class="t-name">{{ peep.name }}</strong>
+                    <strong class="t-username">@{{ peep.username }}</strong>
+                    <p class="t-peep">{{ peep.message }}</p>
+                    <span class="t-created-at">{{ peep.created_at }}</span><br><br>
+                </li>
+            {% endfor %}
+        </ul>
+        <a href="/signup">Sign Up</a>
+    </body>
+</html>
