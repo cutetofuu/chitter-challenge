@@ -182,3 +182,31 @@ def test_create_peep_no_input_given_errors(page, test_web_address, db_connection
 
     errors = page.locator(".t-errors")
     expect(errors).to_have_text("There were errors with your submission: Peep can't be blank")
+
+def test_user_login(page, test_web_address, db_connection):
+    db_connection.seed('seeds/peeps_table.sql')
+    page.goto(f"http://{test_web_address}/home")
+
+    page.click("text='Login'")
+
+    page.fill("input[name=email]", 'john@test.com')
+    page.fill("input[name=password]", 'password444%')
+
+    page.click("text='Login'")
+
+    login_success_tag = page.locator("h2")
+    expect(login_success_tag).to_have_text("Successfully logged in.")
+
+def test_user_login_errors(page, test_web_address, db_connection):
+    db_connection.seed('seeds/peeps_table.sql')
+    page.goto(f"http://{test_web_address}/home")
+
+    page.click("text='Login'")
+
+    page.fill("input[name=email]", 'notauser@test.com')
+    page.fill("input[name=password]", 'password777!')
+
+    page.click("text='Login'")
+
+    errors = page.locator(".t-errors")
+    expect(errors).to_have_text("Sorry, your email/password was incorrect.")

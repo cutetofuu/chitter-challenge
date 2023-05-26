@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, render_template, redirect
+from flask import Flask, request, render_template, redirect, session
 from lib.database_connection import get_flask_database_connection
 from lib.peep_repository import PeepRepository
 from lib.peep import Peep
@@ -9,6 +9,7 @@ from datetime import datetime
 
 # Create a new Flask app
 app = Flask(__name__)
+app.secret_key = "superdupersecretkey"
 
 # PEEPS ROUTES
 
@@ -41,7 +42,7 @@ def create_new_peep():
 # USERS ROUTES
 
 @app.route("/signup", methods=["GET"])
-def get_new_user():
+def signup():
     return render_template("users/signup.html")
 
 @app.route("/signup", methods=["POST"])
@@ -66,6 +67,26 @@ def create_new_user():
 @app.route("/signup-success", methods=["GET"])
 def get_new_user_confirmation():
     return render_template("users/signup_success.html")
+
+@app.route("/login", methods=["GET"])
+def login():
+    return render_template('users/login.html')
+
+@app.route("/login", methods=["POST"])
+def login_post():
+    email = request.form['email']
+    password = request.form['password']
+
+    connection = get_flask_database_connection(app)
+    user_repo = UserRepository(connection)
+
+    if user_repo.check_password(email, password):
+        user = user_repo.find_by_email(email)
+        session['user_id'] = user.id
+
+        return render_template("users/login_success.html")
+    else:
+        return render_template('users/login.html', errors="Sorry, your email/password was incorrect."), 404
 
 # These lines start the server if you run this file directly
 # They also start the server configured to use the test database

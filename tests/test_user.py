@@ -1,10 +1,13 @@
 from lib.user import User
+import hashlib
 
 def test_constructs():
     user = User(1, 'user@test.com', 'password123!', 'Test User', 'test_user')
     assert user.id == 1
     assert user.name == 'Test User'
     assert user.username == 'test_user'
+    assert user._email == "user@test.com"
+    assert user._password == 'password123!'
 
 def test_formatting():
     user = User(1, 'user@test.com', 'password123!', 'Test User', 'test_user')

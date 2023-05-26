@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Chitter</title>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <h1>Chitter</h1>
+        <h2>Login to Chitter</h2>
+        <form action="/login" method="POST">
+            {% if errors %}
+                <p class="t-errors">
+                    {{ errors }}
+                </p>
+            {% endif %}
+
+            <p>
+                <label for="email">Email: </label>
+                <input type="text" name="email" id="email">
+            </p>
+            <p>
+                <label for="password">Password: </label>
+                <input type="text" name="password" id="password">
+            </p>
+            <p>
+                <input type="submit" value="Login">
+            </p>
+        </form>
+    </body>
+</html>

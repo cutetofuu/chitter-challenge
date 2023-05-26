@@ -24,10 +24,10 @@ CREATE TABLE peeps (
 INSERT INTO users 
     (email, password, name, username) 
 VALUES 
-    ('david@test.com', 'password111', 'David', 'dave_test'),
-    ('jane@test.com', 'password222', 'Jane', 'jane_test'),
-    ('pickle@test.com', 'password333', 'Pickle', 'pickle_test'),
-    ('john@test.com', 'password444', 'John', 'john_test');
+    ('david@test.com', '40ccbdf74ca095cbf6a05ede129d3aebdaa16e799b5897be82ca0948fd995d20', 'David', 'dave_test'),
+    ('jane@test.com', '74003ee4634d383f4a1921d434f16e6ef14e2a3259246c130e8a31055250635e', 'Jane', 'jane_test'),
+    ('pickle@test.com', '7052d09741567eaa79757c241d3ee5e2022ad63690ef0f3b2e02f62d5ca6cf6e', 'Pickle', 'pickle_test'),
+    ('john@test.com', 'c6e8b79a09af0a5955447f0fc10348e911a867d11aa4505d411081ace5aa4298', 'John', 'john_test');
 
 INSERT INTO peeps 
     (message, created_at, user_id) 
