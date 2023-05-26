@@ -9,6 +9,12 @@
         <h2>Home</h2>
         <h3>Post a New Peep</h3>
         <form action="/home" method="POST">
+            {% if errors %}
+                <p class="t-errors">
+                    There were errors with your submission: {{ errors }}
+                </p>
+            {% endif %}
+            
             <textarea name="message" placeholder="What is happening?!"></textarea>
             <p>
                 <input type="submit" value="Peep">

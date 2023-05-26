@@ -12,3 +12,14 @@ class Peep:
     
     def __eq__(self, other) -> bool:
         return self.__dict__ == other.__dict__
+    
+    def is_valid(self):
+        if self.message == None or self.message == "":
+            return False
+        return True
+    
+    def generate_errors(self):
+        if self.message == None or self.message == "":
+            return "Peep can't be blank"
+        else:
+            return None

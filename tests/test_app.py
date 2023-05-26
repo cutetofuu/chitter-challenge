@@ -174,4 +174,11 @@ def test_create_peep(page, test_web_address, db_connection):
         "@jane_test"
     ])
 
+def test_create_peep_no_input_given_errors(page, test_web_address, db_connection):
+    db_connection.seed('seeds/peeps_table.sql')
+    page.goto(f"http://{test_web_address}/home")
 
+    page.click("text='Peep'")
+
+    errors = page.locator(".t-errors")
+    expect(errors).to_have_text("There were errors with your submission: Peep can't be blank")

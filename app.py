@@ -23,12 +23,16 @@ def get_all_peeps():
 def create_new_peep():
     connection = get_flask_database_connection(app)
     peep_repo = PeepRepository(connection)
+    peeps = peep_repo.all_with_usernames()
     
     message = request.form["message"]
     created_at = datetime.now()
     user_id = 3
 
     peep = Peep(None, message, created_at, user_id)
+
+    if not peep.is_valid():
+        return render_template('peeps/index.html', peeps=peeps, peep=peep, errors=peep.generate_errors()), 400
 
     peep_repo.create(peep)
 
@@ -53,7 +57,7 @@ def create_new_user():
     user = User(None, email, password, name, username)
 
     if not user.is_valid():
-        return render_template('/users/signup.html', user=user, errors=user.generate_errors()), 400
+        return render_template('users/signup.html', user=user, errors=user.generate_errors()), 400
 
     user_repo.create(user)
 
