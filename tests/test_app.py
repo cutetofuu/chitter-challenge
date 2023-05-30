@@ -142,6 +142,15 @@ def test_create_user_invalid_password_length_given_errors(page, test_web_address
 def test_create_peep(page, test_web_address, db_connection):
     db_connection.seed('seeds/peeps_table.sql')
     page.goto(f"http://{test_web_address}/home")
+
+    page.click("text='Login'")
+
+    page.fill("input[name=email]", 'john@test.com')
+    page.fill("input[name=password]", 'password444%')
+
+    page.click("text='Login'")
+
+    page.click("text='Back to home'")
     
     page.fill("textarea[name=message]", "Hello! I'm new to Chitter.")
 
@@ -160,14 +169,14 @@ def test_create_peep(page, test_web_address, db_connection):
     ])
     expect(created_at_tags).to_have_count(5)
     expect(name_tags).to_have_text([
-        "Pickle",
+        "John",
         "Pickle",
         "John",
         "David",
         "Jane"
     ])
     expect(username_tags).to_have_text([
-        "@pickle_test",
+        "@john_test",
         "@pickle_test",
         "@john_test",
         "@dave_test",
@@ -177,6 +186,15 @@ def test_create_peep(page, test_web_address, db_connection):
 def test_create_peep_no_input_given_errors(page, test_web_address, db_connection):
     db_connection.seed('seeds/peeps_table.sql')
     page.goto(f"http://{test_web_address}/home")
+
+    page.click("text='Login'")
+
+    page.fill("input[name=email]", 'pickle@test.com')
+    page.fill("input[name=password]", 'password333#')
+
+    page.click("text='Login'")
+
+    page.click("text='Back to home'")
 
     page.click("text='Peep'")
 
