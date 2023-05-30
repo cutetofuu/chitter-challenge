@@ -1,75 +1,66 @@
-# Database Project Starter
+# Chitter
 
-This is a starter project for you to use to start your Python database projects.
+## Project Summary
 
-There are two videos to support:
+This is a small web application that mimics some of the features of Twitter. It is written using Python, Flask, HTML, Jinja templates, Psycopg, and uses PostgreSQL as a database. Unit and integrated testing are done using Pytest and Playwright.
 
-* [A demonstration of setting up the project](https://youtu.be/8dBADUN8gdg?t=0s)
-* [A walkthrough of the project codebase](https://www.youtube.com/watch?v=8dBADUN8gdg&t=287s) 
+## Features
 
-## Setup
+`peeps`
 
-```shell
-# Clone the repository to your local machine
-; git clone git@github.com:makersacademy/databases-in-python-project-starter.git YOUR_PROJECT_NAME
+  - Shows a collection of peeps in reverse chronological order
+  - Posts a new peep •only• if a user is logged in
 
-# Or, if you don't have SSH keys set up
-; git clone https://github.com/makersacademy/databases-in-python-project-starter.git YOUR_PROJECT_NAME
+`users`
 
-# Enter the directory
-; cd YOUR_PROJECT_NAME
+  - Allows a new user to sign up for Chitter
+  - Allows an existing user to log in and log out
 
-# Install dependencies and set up the virtual environment
-; pipenv install
-# Read below if you see an error with `python_full_version`
+## Instructions
 
-# Activate the virtual environment
-; pipenv shell
+1. Fork and clone this repository.
 
-# Create the database
-; createdb YOUR_PROJECT_NAME
+2. Set up and activate the virtual environment by running `pipenv install` and then `pipenv shell`.
 
-# Open lib/database_connection.py and change the database name to YOUR_PROJECT_NAME
-; open lib/database_connection.py
+3. Create the databases using the following scripts:
+    - Development database: `createdb chitter`
+    - Test database: `createdb chitter_test`
 
-# Run the tests
-; pytest
+4. Seed the development database: `python seed_dev_database.py`
 
-# Run the app
-; python app.py
-```
+5. Install pytest for the tests: `pipenv install pytest`
 
-<details>
-  <summary>:confused: I see an error about `python_full_version`?</summary>
+6. Run the tests: `pytest`
 
-  <!-- OMITTED -->
+7. Run the app: `python app.py`
 
-  ---
+8. Open up your browser and type in `localhost:5000/[insert path here]`. The available routes are found below.
 
-  Your `pipenv` may be outdated and subject to a bug with newer `Pipfile`s.
+## Routes
 
-  ```shell
-  ; pipenv --version
-  2022.9.24 # If you see something in September 2022, try this
-  ; pip3 install "pipenv>=2022.11.5" -U
-  # pip3 will update pipenv for you
+### `/home`
+- User can view a collection of peeps, even if they're not logged in.
+- User can post a new peep •only• if they're logged in.
 
-  # Then try running `pipenv install` again
-  ; pipenv install
-  ```
+### `/signup`
+- User can sign up for Chitter using a valid email, password, name and username.
 
-  If that works, great! If not, contact your coach.
+### `/login`
+- User can sign up for Chitter using a valid email and password.
 
-  ---
-</details>
+### `/logout`
+- Lets a user know that they've successfully signed up to Chitter.
+- Provides a link to take the user back to the home page.
 
+## Features I would like to fix/add
 
-<!-- BEGIN GENERATED SECTION DO NOT EDIT -->
-
----
-
-**How was this resource?**  
-[😫](https://airtable.com/shrUJ3t7KLMqVRFKR?prefill_Repository=makersacademy%2Fdatabases-in-python-project-starter&prefill_File=README.md&prefill_Sentiment=😫) [😕](https://airtable.com/shrUJ3t7KLMqVRFKR?prefill_Repository=makersacademy%2Fdatabases-in-python-project-starter&prefill_File=README.md&prefill_Sentiment=😕) [😐](https://airtable.com/shrUJ3t7KLMqVRFKR?prefill_Repository=makersacademy%2Fdatabases-in-python-project-starter&prefill_File=README.md&prefill_Sentiment=😐) [🙂](https://airtable.com/shrUJ3t7KLMqVRFKR?prefill_Repository=makersacademy%2Fdatabases-in-python-project-starter&prefill_File=README.md&prefill_Sentiment=🙂) [😀](https://airtable.com/shrUJ3t7KLMqVRFKR?prefill_Repository=makersacademy%2Fdatabases-in-python-project-starter&prefill_File=README.md&prefill_Sentiment=😀)  
-Click an emoji to tell us.
-
-<!-- END GENERATED SECTION DO NOT EDIT -->
+- [ ] Fix timestamp for new peeps to not display milliseconds
+- [ ] Fix password input box to not display the typed-in password
+- [ ] Show a page for a specific peep
+    - when the peep id is given
+    - or a peep is clicked on
+- [ ] Update the like count for a specific peep
+- [ ] Delete an existing peep
+- [ ] Receive an email if tagged in a peep
+- [ ] Check if username and email already exist when signing up
+- [ ] Show a page for a specific user, with a list of all of their peeps
