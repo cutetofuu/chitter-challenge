@@ -18,7 +18,10 @@ def get_all_peeps():
     connection = get_flask_database_connection(app)
     peep_repo = PeepRepository(connection)
     peeps = peep_repo.all_with_usernames()
-    return render_template("peeps/index.html", peeps=peeps)
+    if 'user_id' not in session:
+        session['user_id'] = None
+
+    return render_template("peeps/index.html", peeps=peeps, session=session)
 
 @app.route("/home", methods=["POST"])
 def create_new_peep():
@@ -28,7 +31,7 @@ def create_new_peep():
     
     message = request.form["message"]
     created_at = datetime.now()
-    user_id = 3
+    user_id = session['user_id']
 
     peep = Peep(None, message, created_at, user_id)
 
@@ -87,6 +90,11 @@ def login_post():
         return render_template("users/login_success.html")
     else:
         return render_template('users/login.html', errors="Sorry, your email/password was incorrect."), 404
+
+@app.route("/logout", methods=["GET"])
+def logout():
+    del session['user_id']
+    return render_template("users/logout_success.html")
 
 # These lines start the server if you run this file directly
 # They also start the server configured to use the test database
